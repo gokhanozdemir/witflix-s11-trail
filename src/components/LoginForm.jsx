@@ -1,30 +1,21 @@
-import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import useLocalStorage from '../hooks/useLocalStorage';
-import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext';
 import './Form.css';
-
-import { toast } from 'react-toastify';
-
 function LoginForm() {
-  const key = 'userInfo';
-  const initialUserData = {};
-  const [userData, setUserData] = useLocalStorage(key, initialUserData);
-
+  const { signin } = useAuth()
   const initialForm = {
     userInfo: 'emilys',
     passField: 'emilyspass',
     rememberMe: false,
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (userData.accessToken) {
       history.push('/who-is-watching');
     }
-  }, []);
+  }, []); */
 
-  let history = useHistory();
   const {
     register,
     handleSubmit,
@@ -42,43 +33,10 @@ function LoginForm() {
       rememberMe: data.rememberMe,
     };
 
-    handleLogin(loginData);
+    signin(loginData);
   };
 
-  const handleLogin = (loginData) => {
-    const loginToaster = toast.loading('Please wait...');
-    axios
-      .post('https://dummyjson.com/auth/login', loginData)
-      .then(function (response) {
-        console.log(response);
-        toast.update(loginToaster, {
-          render: 'All is good, redirecting...',
-          type: 'success',
-          isLoading: false,
-          closeOnClick: true,
-          autoClose: 2000,
-        });
 
-        console.log('loginData.rememberMe', loginData.rememberMe);
-
-        if (!!loginData.rememberMe) {
-          console.log('response.data', response.data);
-          setUserData(response.data);
-        }
-
-        history.push('/who-is-watching');
-      })
-      .catch(function (error) {
-        console.log(error);
-        toast.update(loginToaster, {
-          render: error.response.data.message,
-          type: 'error',
-          isLoading: false,
-          closeOnClick: true,
-          autoClose: 5000,
-        });
-      });
-  };
 
   return (
     <>
