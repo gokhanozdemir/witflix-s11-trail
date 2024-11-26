@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import axios from "axios";
-import { createContext, useState } from "react";
+import { createContext, useContext } from "react";
 import { toast } from "react-toastify";
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import useLocalStorage from "../hooks/useLocalStorage";
 
 /** For more det ails on
@@ -10,20 +11,6 @@ import useLocalStorage from "../hooks/useLocalStorage";
  */
 const authContext = createContext();
 
-export function ProvideAuth({ children }) {
-	const auth = useProvideAuth();
-	return (
-		<authContext.Provider value={auth}>
-			{children}
-		</authContext.Provider>
-	);
-}
-
-export function useAuth() {
-	return useContext(authContext);
-}
-
-
 
 function useProvideAuth() {
 	const key = 'userInfo';
@@ -31,15 +18,7 @@ function useProvideAuth() {
 	const [user, setUser] = useLocalStorage(key, initialUserData);
 	const history = useHistory();
 
-	/* const signin = cb => {
-		return fakeAuth.signin(() => {
-			setUser("user");
-			cb();
-		});
-	}; */
-
-
-	const login = (loginData) => {
+	const signin = (loginData) => {
 		const loginToaster = toast.loading('Please wait...');
 		axios
 			.post('https://dummyjson.com/auth/login', loginData)
@@ -79,7 +58,23 @@ function useProvideAuth() {
 
 	return {
 		user,
-		login,
+		signin,
 		signout
 	};
 }
+
+export function ProvideAuth({ children }) {
+	const auth = useProvideAuth();
+	return (
+		<authContext.Provider value={auth}>
+			{children}
+		</authContext.Provider>
+	);
+}
+
+export function useAuth() {
+	return useContext(authContext);
+}
+
+
+
