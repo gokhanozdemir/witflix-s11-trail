@@ -1,0 +1,134 @@
+/* Input group */
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center; /* Center align checkbox and label */
+}
+
+/* Label styles */
+.input-group label {
+  cursor: pointer; /* Change cursor when hovering over label */
+  color: var(--text-light-gray); /* Label color */
+  transition: color 0.3s ease-in-out; /* Smooth transition for color */
+}
+
+.input-group input::placeholder {
+  color: transparent;
+}
+
+/* Label styles */
+.input-group:has(input[type='text']) label,
+.input-group:has(input[type='email']) label,
+.input-group:has(input[type='password']) label {
+  position: absolute;
+  top: var(--gap-m);
+  left: var(--gap-s);
+
+  color: var(--text-light-gray);
+  transition: all 0.3s ease-in-out; /* Smooth transition */
+  pointer-events: none; /* Prevent label from capturing clicks */
+}
+
+/* Input fields */
+.input-group input[type='text'],
+.input-group input[type='email'],
+.input-group input[type='password'] {
+  flex-grow: 1;
+  padding: var(--gap-m) var(--gap-s);
+  background-color: var(--bg-gray);
+  color: var(--text-lightest);
+}
+
+/* Input fields outline states basis*/
+.input-group input[type='text'],
+.input-group input[type='email'],
+.input-group input[type='password'],
+.input-group input[type='checkbox'] {
+  outline-offset: 2px; /* Space between the outline and the input */
+  outline: 2px solid transparent; /* Focus ring color */
+  transition: border-color, outline 0.3s ease-in-out; /* Smooth transition for 
+  focus effect */
+  border: 1px solid var(--bg-gray);
+  border-radius: calc(var(--border-radius) / 2);
+  font-size: 1rem;
+}
+
+/* Move label up when input is focused or filled */
+.input-group:has([type='text']:focus) label,
+.input-group:has([type='email']:focus) label,
+.input-group:has([type='password']:focus) label,
+.input-group:has(input:valid):not(:has(input:placeholder-shown)):not(
+    :has(input[type='checkbox'])
+  )
+  label {
+  top: calc(var(--gap-s) / 2); /* Move label up */
+  left: var(--gap-s); /* Keep label aligned */
+  font-size: 0.7rem; /* Smaller font size */
+}
+
+/* Focus effect for input fields */
+.input-group input[type='text']:focus,
+.input-group input[type='email']:focus,
+.input-group input[type='password']:focus,
+.input-group input[type='checkbox']:focus {
+  outline: 2px solid var(--text-lightest); /* Focus ring color */
+  box-shadow: 0 0 5px rgba(229, 9, 20, 0.5); /* Optional shadow effect */
+}
+
+/* Error state border-color: var(--primary-red); /* Change border color on focus */
+
+/* Checkbox styles */
+.input-group input[type='checkbox'] {
+  width: 20px; /* Set checkbox size */
+  height: 20px; /* Set checkbox size */
+  margin-right: var(--gap-s); /* Space between checkbox and label */
+  cursor: pointer; /* Change cursor on hover */
+  appearance: none; /* Remove default styling */
+  border: 2px solid var(--bg-gray); /* Border color */
+
+  background-color: var(--bg-gray); /* Background color */
+  border-radius: calc(var(--border-radius)); /* Rounded corners */
+  outline-offset: 3px; /* Space between the outline and the input */
+
+  transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+}
+
+/* Checkbox checked state */
+.input-group input[type='checkbox']:checked {
+  background-color: var(--bg-lightest); /* Background color when checked */
+  border-color: var(--bg-lightest); /* Border color when checked */
+}
+
+/* Checkbox hover state */
+.input-group input[type='checkbox']:hover {
+  border-color: var(--text-dark-gray); /* Change border color on hover */
+}
+
+/* Checkbox focus state */
+.input-group input[type='checkbox']:focus {
+  box-shadow: 0 0 5px rgba(229, 9, 20, 0.5); /* Optional shadow effect */
+}
+
+/* Change label color on checkbox hover */
+.input-group input[type='checkbox']:hover + label {
+  color: var(
+    --text-dark-gray
+  ); /* Change label color when checkbox is hovered */
+}
+
+/* Change label color when checkbox is checked */
+.input-group input[type='checkbox']:checked + label {
+  color: var(--bg-lightest); /* Change label color when checkbox is checked */
+}
+
+.input-group input[type='checkbox']:checked + label::after {
+  content: ''; /* Create an empty content */
+  position: absolute; /* Position it absolutely */
+  left: 10px; /* Adjust position for check mark */
+  top: 5px; /* Adjust position for check mark */
+  width: 4px; /* Width of the check mark */
+  height: 12px; /* Height of the check mark */
+  border: solid var(--text-dark-gray); /* Color of the check mark */
+  border-width: 0 3px 3px 0; /* Create a check mark shape */
+  transform: rotate(45deg); /* Rotate to form a check mark */
+}
