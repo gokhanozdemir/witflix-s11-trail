@@ -27,7 +27,7 @@ function useAxios() {
 
 	}
 
-	return { data, doRequest, loading, error }
+	return { data, setData, doRequest, loading, error }
 }
 
 export default useAxios

@@ -10,12 +10,12 @@ export default function useLocalStorage(key, defaultValue) {
   });
 
   const setToLocalStorage = (data) => {
-    localStorage.setItem(key, JSON.stringify(data));
+    if (data === null) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
     setValue(data);
   };
-
-  // if you want to set state optionally, use the third method
-  const setStateOnly = (data) => { setValue(data); };
-
-  return [value, setToLocalStorage, setStateOnly];
+  return [value, setToLocalStorage];
 }

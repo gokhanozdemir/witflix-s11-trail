@@ -4,18 +4,18 @@ import { toast } from "react-toastify";
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from "../hooks/useLocalStorage";
 import useAxios from "../hooks/useAxios";
-/** For more det ails on
- * `authContext`, `ProvideAuth`, `useAuth` and `useProvideAuth`
- * refer to: https://usehooks.com/useAuth/
- */
+
+
 const authContext = createContext();
 
 function useProvideAuth() {
-	const { data, doRequest, loading, error } = useAxios();
 	const key = 'userInfo';
 	const initialUserData = {};
-	const [user, setUser, setUserStateOnly] = useLocalStorage(key, initialUserData);
+
+	const [_storedUser, setStoredUserInfo] = useLocalStorage(key, initialUserData);
 	const history = useHistory();
+
+	const { data: user, setData: setUser, doRequest } = useAxios();
 	const signin = (loginData) => {
 		const loginToaster = toast.loading('Please wait...');
 		doRequest({ endpoint: '/login', requestData: loginData, method: 'post' })
@@ -29,10 +29,10 @@ function useProvideAuth() {
 				});
 
 				if (loginData.rememberMe) {
-					// console.log('response.data', response.data);
 					setUser(response.data);
+					setStoredUserInfo(response.data);
 				} else {
-					setUserStateOnly(response.data);
+					setUser(response.data);
 				}
 
 				history.push('/who-is-watching');
@@ -49,12 +49,13 @@ function useProvideAuth() {
 	};
 
 	const signout = () => {
-		setUser(initialUserData);
+		setUser(null);
+		setStoredUserInfo(null);
 		history.push('/');
 	};
 
 	const isUserLoggedIn = () => {
-		if (user.accessToken) {
+		if (user?.accessToken) {
 			return true;
 		}
 		return false;
@@ -62,7 +63,7 @@ function useProvideAuth() {
 
 	const checkUserLoggedIn = () => {
 		// TODO: Check with verify
-		if (user.accessToken) {
+		if (user?.accessToken) {
 			history.push('/');
 			return true;
 		}
