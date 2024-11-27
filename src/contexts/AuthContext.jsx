@@ -15,7 +15,7 @@ const authContext = createContext();
 function useProvideAuth() {
 	const key = 'userInfo';
 	const initialUserData = {};
-	const [user, setUser] = useLocalStorage(key, initialUserData);
+	const [user, setUser, setUserStateOnly] = useLocalStorage(key, initialUserData);
 	const history = useHistory();
 
 	const signin = (loginData) => {
@@ -35,6 +35,8 @@ function useProvideAuth() {
 				if (loginData.rememberMe) {
 					console.log('response.data', response.data);
 					setUser(response.data);
+				} else {
+					setUserStateOnly(response.data);
 				}
 
 				history.push('/who-is-watching');
@@ -52,14 +54,32 @@ function useProvideAuth() {
 	};
 
 	const signout = () => {
-		setUser(null);
+		setUser(initialUserData);
 		history.push('/');
 	};
+
+	const isUserLoggedIn = () => {
+		if (user.accessToken) {
+			return true;
+		}
+		return false;
+	}
+
+	const checkUserLoggedIn = () => {
+		// TODO: Check with verify
+		if (user.accessToken) {
+			history.push('/');
+			return true;
+		}
+		return false;
+	}
 
 	return {
 		user,
 		signin,
-		signout
+		signout,
+		isUserLoggedIn,
+		checkUserLoggedIn
 	};
 }
 
@@ -75,6 +95,8 @@ export function ProvideAuth({ children }) {
 export function useAuth() {
 	return useContext(authContext);
 }
-
-
+// 09-24 !
+// çünkü öyle 
+// <3
+// bcs why not
 

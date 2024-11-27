@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function useLocalStorage(key, defaultValue) {
   const [value, setValue] = useState(() => {
@@ -14,5 +14,8 @@ export default function useLocalStorage(key, defaultValue) {
     setValue(data);
   };
 
-  return [value, setToLocalStorage];
+  // if you want to set state optionally, use the third method
+  const setStateOnly = (data) => { setValue(data); };
+
+  return [value, setToLocalStorage, setStateOnly];
 }
