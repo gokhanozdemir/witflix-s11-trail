@@ -1,25 +1,25 @@
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import './Form.css';
+import { useEffect } from 'react';
 function LoginForm() {
   const { signin } = useAuth()
   const initialForm = {
     userInfo: 'emilys',
     passField: 'emilyspass',
-    rememberMe: false,
+    rememberMe: true,
   };
+  const { checkUserLoggedIn } = useAuth();
 
-  /* useEffect(() => {
-    if (userData.accessToken) {
-      history.push('/who-is-watching');
-    }
-  }, []); */
+  useEffect(() => {
+    checkUserLoggedIn()
+  }, []);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, values },
+    formState: { errors, isValid },
   } = useForm({
     defaultValues: initialForm,
     mode: 'all',
@@ -35,8 +35,6 @@ function LoginForm() {
 
     signin(loginData);
   };
-
-
 
   return (
     <>

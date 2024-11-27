@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { Switch, Route, Link, useHistory, useParams } from 'react-router-dom';
+import { Switch, Route, Link, useParams } from 'react-router-dom';
 import './App.css';
 import Profiles from './components/Profiles';
 import LoginForm from './components/LoginForm';
+import PrivateRoute from './components/PrivateRoute';
+import { useAuth } from './contexts/AuthContext';
 
 /*   
 
@@ -15,10 +16,16 @@ import LoginForm from './components/LoginForm';
 */
 
 function ProfileDetail() {
+  const { profileID } = useParams();
   return <div>Now showing profile {profileID}</div>;
 }
 
 function App() {
+  const { signout, isUserLoggedIn } = useAuth();
+  const handleLogout = () => {
+    signout();
+  }
+
   return (
     <div>
       {/* TODO: NAV test için şimdilik burada, genecekte silinecek */}
@@ -31,17 +38,24 @@ function App() {
             <Link to="/who-is-watching">Profiles</Link>
           </li>
         </ul>
+        {isUserLoggedIn() ? <button onClick={handleLogout}>Sign Out</button> : <button >Sign In</button>}
       </nav>
       <Switch>
-        <Route path="/who-is-watching">
+        <PrivateRoute path="/who-is-watching">
           <Profiles />
-        </Route>
-        <Route path="/profile/:profileID">
+        </PrivateRoute>
+
+        <PrivateRoute path="/profile/:profileID">
           <ProfileDetail />
-        </Route>
-        <Route path="/">
+        </PrivateRoute>
+
+        <Route path="/login">
           <LoginForm />
         </Route>
+
+        <PrivateRoute path="/">
+          <h1>Movies Home</h1>
+        </PrivateRoute>
       </Switch>
     </div>
   );
