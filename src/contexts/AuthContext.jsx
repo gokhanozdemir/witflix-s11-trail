@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
-import axios from "axios";
 import { createContext, useContext } from "react";
 import { toast } from "react-toastify";
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from "../hooks/useLocalStorage";
-import { authServiceAPI } from "../api/AuthServiceApi";
+import useAxios from "../hooks/useAxios";
 /** For more det ails on
  * `authContext`, `ProvideAuth`, `useAuth` and `useProvideAuth`
  * refer to: https://usehooks.com/useAuth/
@@ -12,16 +11,15 @@ import { authServiceAPI } from "../api/AuthServiceApi";
 const authContext = createContext();
 
 function useProvideAuth() {
+	const { data, doRequest, loading, error } = useAxios();
 	const key = 'userInfo';
 	const initialUserData = {};
 	const [user, setUser, setUserStateOnly] = useLocalStorage(key, initialUserData);
 	const history = useHistory();
 	const signin = (loginData) => {
 		const loginToaster = toast.loading('Please wait...');
-		authServiceAPI
-			.post('/login', loginData)
+		doRequest({ endpoint: '/login', requestData: loginData, method: 'post' })
 			.then(function (response) {
-				console.log(response);
 				toast.update(loginToaster, {
 					render: 'All is good, redirecting...',
 					type: 'success',
@@ -38,8 +36,7 @@ function useProvideAuth() {
 				}
 
 				history.push('/who-is-watching');
-			})
-			.catch(function (error) {
+			}).catch(function (error) {
 				console.log(error);
 				toast.update(loginToaster, {
 					render: error.response.data.message,

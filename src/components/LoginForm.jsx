@@ -8,7 +8,7 @@ function LoginForm() {
   const initialForm = {
     userInfo: 'emilys',
     passField: 'emilyspass',
-    rememberMe: true,
+    rememberMe: false,
   };
   const { checkUserLoggedIn } = useAuth();
 
