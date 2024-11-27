@@ -38,11 +38,15 @@ function App() {
             <Link to="/who-is-watching">Profiles</Link>
           </li>
         </ul>
-        {isUserLoggedIn() ? <button onClick={handleLogout}>Sign Out</button> : <button >Sign In</button>}
+        {isUserLoggedIn()
+          ?
+          <button onClick={handleLogout}>Sign Out</button>
+          :
+          <button >Sign In</button>}
       </nav>
       <Switch>
         <PrivateRoute path="/who-is-watching">
-          <Profiles />
+          <Profiles /> {/* children propu ile otomatik taşınır */}
         </PrivateRoute>
 
         <PrivateRoute path="/profile/:profileID">

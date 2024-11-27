@@ -9,10 +9,10 @@ export default function PrivateRoute({ children, ...rest }) {
 
 	return (
 		<Route
-			{...rest}
+			{...rest} // verilen diğer component proplarını taşır
 			render={({ location }) =>
 				user?.accessToken ? (
-					children
+					children // ön tanımlı çocuk bileşenleri taşır.
 				) : (
 					<Redirect
 						to={{
